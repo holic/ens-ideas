@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@ensdomains/eth-ens-namehash': ^2.0.15
   '@ethersproject/abi': ^5.5.0
   '@ethersproject/bytes': ^5.5.0
   '@ethersproject/providers': ^5.5.1
@@ -13,6 +14,7 @@ specifiers:
   classnames: ^2.3.1
   ethers: ^5.5.2
   graphql: ^16.2.0
+  idna-uts46-hx: ^3.4.0
   postcss: ^8.4.5
   react: ^17.0.2
   react-dom: ^17.0.2
@@ -25,9 +27,11 @@ specifiers:
   zustand: ^3.6.7
 
 dependencies:
+  '@ensdomains/eth-ens-namehash': 2.0.15
   '@ethersproject/providers': 5.5.1
   classnames: 2.3.1
   graphql: 16.2.0
+  idna-uts46-hx: 3.4.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-use: 17.3.1_react-dom@17.0.2+react@17.0.2
@@ -319,6 +323,10 @@ packages:
       '@babel/helper-validator-identifier': 7.15.7
       to-fast-properties: 2.0.0
     dev: true
+
+  /@ensdomains/eth-ens-namehash/2.0.15:
+    resolution: {integrity: sha512-JRDFP6+Hczb1E0/HhIg0PONgBYasfGfDheujmfxaZaAv/NAH4jE6Kf48WbqfRZdxt4IZI3jl3Ri7sZ1nP09lgw==}
+    dev: false
 
   /@ethersproject/abi/5.5.0:
     resolution: {integrity: sha512-loW7I4AohP5KycATvc0MgujU6JyCHPqHdeoo9z3Nr9xEiNioxa65ccdm1+fsoJhkuhdRtfcL8cfyGamz2AxZ5w==}
@@ -1415,6 +1423,13 @@ packages:
     resolution: {integrity: sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==}
     dev: false
 
+  /idna-uts46-hx/3.4.0:
+    resolution: {integrity: sha512-b1I4qYTcJcX1TANn8OhOGrQUIWOfZUWrLKWDeKbV6posVLjp7OTqFKX3N20efrIMzQM1KhiphOEazBEEUFR9bg==}
+    engines: {node: '>=10.18.0', npm: '>=6.13.4'}
+    dependencies:
+      punycode: 2.1.1
+    dev: false
+
   /import-cwd/3.0.0:
     resolution: {integrity: sha512-4pnzH16plW+hgvRECbDWpQl3cqtvSofHWh44met7ESfZ8UZOWWddm8hEyDTqREJ9RbYHY8gi8DqmaelApoOGMg==}
     engines: {node: '>=8'}
@@ -1741,6 +1756,11 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
+
+  /punycode/2.1.1:
+    resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
+    engines: {node: '>=6'}
+    dev: false
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}

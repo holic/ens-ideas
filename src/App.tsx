@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { useRegistration } from "./useRegistration";
+// @ts-ignore
+import namehash from "@ensdomains/eth-ens-namehash";
 
 export const App = () => {
   const [query, setQuery] = useState("");
+  const [name, setName] = useState("");
 
-  const { isRegistered, error, fetching } = useRegistration(query);
+  useEffect(() => {
+    try {
+      setName(namehash.normalize(query));
+    } catch (error) {}
+  }, [query]);
+
+  const { isRegistered, error, fetching } = useRegistration(name);
 
   const url = `https://app.ens.domains/name/${encodeURIComponent(
-    `${query}.eth`
+    `${name}.eth`
   )}`;
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-indigo-400">
       <form
-        action={url}
-        target="_blank"
+        onSubmit={(event) => {
+          event.preventDefault();
+          window.open(url, "_blank");
+        }}
         className="w-2/3 flex flex-col flex-wrap gap-8 transition p-10 bg-white text-gray-600 rounded-xl shadow-2xl"
       >
         <input
@@ -24,14 +35,9 @@ export const App = () => {
           value={query}
           onChange={(event) => {
             event.preventDefault();
-            setQuery(
-              event.currentTarget.value
-                // TODO: support emoji
-                // TODO: normalize domain with some library
-                .replace(/[^\w-]/g, "")
-                .replace(/_/g, "")
-                .toLocaleLowerCase()
-            );
+            try {
+              setQuery(event.currentTarget.value);
+            } catch (error) {}
           }}
           autoFocus
           spellCheck={false}
@@ -52,7 +58,7 @@ export const App = () => {
                 }
               )}
             >
-              <span className="group-hover:underline">{query}.eth</span>{" "}
+              <span className="group-hover:underline">{name}.eth</span>{" "}
               <span className="">&rarr;</span>
             </a>
           ) : (

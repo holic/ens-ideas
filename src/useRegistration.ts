@@ -2,7 +2,7 @@ import { useQuery, gql } from "urql";
 
 const RegistrationQuery = gql`
   query RegistrationQuery($name: String!) {
-    registrations(where: { labelName: $name }) {
+    registrations(where: { labelName: $name }, first: 1) {
       domain {
         name
       }

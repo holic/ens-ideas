@@ -8,9 +8,11 @@
     "typechain": "typechain --target=ethers-v5 --out-dir=typechain-types contracts/**/*.json"
   },
   "dependencies": {
+    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ethersproject/providers": "^5.5.1",
     "classnames": "^2.3.1",
     "graphql": "^16.2.0",
+    "idna-uts46-hx": "^3.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-use": "^17.3.1",

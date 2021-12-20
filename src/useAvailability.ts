@@ -25,6 +25,7 @@ export const useAvailability = (name: string) => {
 
   return useAsync(async () => {
     if (result) return result;
+    if (name.length < 3) return false;
 
     const promise = contract.available(name);
 

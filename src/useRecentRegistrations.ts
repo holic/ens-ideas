@@ -29,9 +29,16 @@ const filter = contract.filters.NameRegistered();
 
 contract.on(filter, (name) => {
   console.log("new name registered:", name);
-  useStore.setState((state) => ({
-    registrations: [{ name, date: DateTime.now() }, ...state.registrations],
-  }));
+  useStore.setState((state) => {
+    if (
+      state.registrations.find((registration) => registration.name === name)
+    ) {
+      return;
+    }
+    return {
+      registrations: [{ name, date: DateTime.now() }, ...state.registrations],
+    };
+  });
 });
 
 export const useRecentRegistrations = () => {

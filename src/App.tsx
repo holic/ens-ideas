@@ -1,42 +1,11 @@
-import { JsonRpcProvider } from "@ethersproject/providers";
-import { ETHRegistrarController__factory } from "../typechain-types";
-import useAsync from "react-use/lib/useAsync"; // https://github.com/streamich/react-use/pull/2101
 import { useState } from "react";
 import classNames from "classnames";
-import createStore from "zustand";
-
-const provider = new JsonRpcProvider(
-  "https://eth-mainnet.alchemyapi.io/v2/5v4BuuWBFvvYHZoZZP5xFo2q1ldvABwj"
-);
-
-const contract = ETHRegistrarController__factory.connect(
-  "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5",
-  provider
-);
-
-type Store = {
-  availability: Partial<Record<string, Promise<boolean>>>;
-};
-
-const useStore = createStore<Store>(() => ({
-  availability: {},
-}));
+import { useRegistration } from "./useRegistration";
 
 export const App = () => {
   const [query, setQuery] = useState("");
-  const availability = useStore((state) => state.availability[query]);
 
-  const state = useAsync(async () => {
-    if (availability) return availability;
-    const promise = contract.available(query);
-    useStore.setState((state) => ({
-      availability: {
-        ...state.availability,
-        [query]: promise,
-      },
-    }));
-    return promise;
-  }, [query]);
+  const { isRegistered, error, fetching } = useRegistration(query);
 
   const url = `https://app.ens.domains/name/${encodeURIComponent(
     `${query}.eth`
@@ -77,9 +46,9 @@ export const App = () => {
               className={classNames(
                 "group flex flex-wrap gap-6 items-center justify-between",
                 {
-                  "text-gray-500 animate-pulse": state.loading || state.error,
-                  "text-green-500": !state.loading && state.value,
-                  "text-red-500": !state.loading && !state.value,
+                  "text-gray-500 animate-pulse": fetching || error,
+                  "text-green-500": !fetching && !isRegistered,
+                  "text-red-500": !fetching && isRegistered,
                 }
               )}
             >

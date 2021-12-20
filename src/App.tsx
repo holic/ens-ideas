@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { ETHRegistrarController__factory } from "../typechain-types";
-import { useAsync } from "react-use";
+import useAsync from "react-use/lib/useAsync"; // https://github.com/streamich/react-use/pull/2101
 import { useState } from "react";
 import classNames from "classnames";
 import createStore from "zustand";

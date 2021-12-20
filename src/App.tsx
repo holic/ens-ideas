@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { useRegistration } from "./useRegistration";
 // @ts-ignore
-import namehash from "@ensdomains/eth-ens-namehash";
+import { normalize } from "@ensdomains/eth-ens-namehash";
 import { useRecentRegistrations } from "./useRecentRegistrations";
 import { RelativeTime } from "./RelativeTime";
 
@@ -13,7 +13,7 @@ export const App = () => {
 
   useEffect(() => {
     try {
-      setName(namehash.normalize(query.replace(/\s/g, "")));
+      setName(normalize(query.replace(/\s/g, "")));
     } catch (error) {}
   }, [query]);
 
@@ -30,8 +30,8 @@ export const App = () => {
   )}`;
 
   return (
-    <div className="w-screen h-screen flex flex-col gap-2 justify-center items-center bg-indigo-400">
-      <div className="w-2/3 px-4 text-lg text-indigo-900 font-bold">
+    <div className="w-screen h-screen flex flex-col gap-4 justify-center items-center bg-indigo-400">
+      <div className="w-2/3 px-4 text-2xl text-indigo-900 font-bold">
         ENS Ideas 🤔
       </div>
       <form
@@ -76,7 +76,7 @@ export const App = () => {
           )}
         </div>
       </form>
-      <div className="w-2/3 h-60 overflow-hidden p-8 text-indigo-700 flex flex-col gap-1 relative">
+      <div className="w-2/3 h-60 overflow-hidden p-4 text-indigo-700 flex flex-col gap-1 relative">
         {recentRegistrations.map((registration) => (
           <div key={registration.name}>
             <span className="text-indigo-900 font-bold">

@@ -13,7 +13,13 @@ export const App = () => {
 
   useEffect(() => {
     try {
-      setName(normalize(query.replace(/\s/g, "")));
+      setName(
+        normalize(
+          query
+            .replace(/[\s\\'!"#$%&()*+,.\/:;<=>?@\[\]^_`{|}~]/g, "")
+            .replace(/^-+|-+$/g, "")
+        )
+      );
     } catch (error) {}
   }, [query]);
 

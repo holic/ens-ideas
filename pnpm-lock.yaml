@@ -6,6 +6,7 @@ specifiers:
   '@ethersproject/bytes': ^5.5.0
   '@ethersproject/providers': ^5.5.1
   '@typechain/ethers-v5': ^8.0.5
+  '@types/luxon': ^2.0.8
   '@types/node': ^17.0.1
   '@types/react': ^17.0.33
   '@types/react-dom': ^17.0.10
@@ -15,6 +16,7 @@ specifiers:
   ethers: ^5.5.2
   graphql: ^16.2.0
   idna-uts46-hx: ^3.4.0
+  luxon: ^2.2.0
   postcss: ^8.4.5
   react: ^17.0.2
   react-dom: ^17.0.2
@@ -32,6 +34,7 @@ dependencies:
   classnames: 2.3.1
   graphql: 16.2.0
   idna-uts46-hx: 3.4.0
+  luxon: 2.2.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-use: 17.3.1_react-dom@17.0.2+react@17.0.2
@@ -42,6 +45,7 @@ devDependencies:
   '@ethersproject/abi': 5.5.0
   '@ethersproject/bytes': 5.5.0
   '@typechain/ethers-v5': 8.0.5_a848fe645bd40ab7aaf263ae8b85b812
+  '@types/luxon': 2.0.8
   '@types/node': 17.0.1
   '@types/react': 17.0.37
   '@types/react-dom': 17.0.11
@@ -680,6 +684,10 @@ packages:
   /@types/js-cookie/2.2.7:
     resolution: {integrity: sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA==}
     dev: false
+
+  /@types/luxon/2.0.8:
+    resolution: {integrity: sha512-lGmxL6hMEVqXr8w9bL52RUWXVu90o7vH8WQSutQssr2e+w0TNttXx2Zfw2V2lHHHWfW6OGqB8bXDvtKocv19qQ==}
+    dev: true
 
   /@types/node/17.0.1:
     resolution: {integrity: sha512-NXKvBVUzIbs6ylBwmOwHFkZS2EXCcjnqr8ZCRNaXBkHAf+3mn/rPcJxwrzuc6movh8fxQAsUUfYklJ/EG+hZqQ==}
@@ -1559,6 +1567,11 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+    dev: false
+
+  /luxon/2.2.0:
+    resolution: {integrity: sha512-LwmknessH4jVIseCsizUgveIHwlLv/RQZWC2uDSMfGJs7w8faPUi2JFxfyfMcTPrpNbChTem3Uz6IKRtn+LcIA==}
+    engines: {node: '>=12'}
     dev: false
 
   /mdn-data/2.0.14:

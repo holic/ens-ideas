@@ -14,7 +14,7 @@ export const useRegistration = (name: string) => {
   const [result, reexecuteQuery] = useQuery({
     query: RegistrationQuery,
     variables: { name },
-    pause: name === "",
+    pause: name.length < 3,
   });
 
   const { data, error, fetching } = result;

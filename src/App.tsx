@@ -39,26 +39,50 @@ export const App = () => {
   }, [query]);
 
   return (
-    <div className="p-10 text-4xl">
-      <input
-        className="border-2"
-        value={query}
-        onChange={(event) => {
-          event.preventDefault();
-          setQuery(event.currentTarget.value);
-        }}
-      />
-      {query !== "" ? (
-        <div
-          className={classNames({
-            "text-gray-500": state.loading || state.error,
-            "text-green-500": !state.loading && state.value,
-            "text-red-500": !state.loading && !state.value,
-          })}
-        >
-          {query}.eth
+    <div className="w-screen h-screen flex flex-col justify-center items-center bg-indigo-400">
+      <div className="w-2/3 flex flex-col flex-wrap gap-8 transition p-10 bg-white text-gray-600 rounded-xl shadow-2xl">
+        <input
+          className="outline-none border-4 border-gray-200 focus:border-blue-300 rounded-full px-6 py-3 text-3xl"
+          type="url"
+          placeholder="Find a .eth domain"
+          value={query}
+          onChange={(event) => {
+            event.preventDefault();
+            setQuery(
+              event.currentTarget.value
+                // TODO: support emoji
+                // TODO: normalize domain with some library
+                .replace(/[^\w-]/g, "")
+                .replace(/_/g, "")
+                .toLocaleLowerCase()
+            );
+          }}
+          autoFocus
+        />
+        <div className="p-6 text-4xl font-bold">
+          {query !== "" ? (
+            <a
+              href={`https://app.ens.domains/name/${encodeURIComponent(
+                `${query}.eth`
+              )}`}
+              target="_blank"
+              className={classNames(
+                "group flex flex-wrap gap-6 items-center justify-between",
+                {
+                  "text-gray-500 animate-pulse": state.loading || state.error,
+                  "text-green-500": !state.loading && state.value,
+                  "text-red-500": !state.loading && !state.value,
+                }
+              )}
+            >
+              <span className="group-hover:underline">{query}.eth</span>{" "}
+              <span className="">&rarr;</span>
+            </a>
+          ) : (
+            <>&nbsp;</>
+          )}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 };

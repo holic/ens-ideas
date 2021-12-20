@@ -116,7 +116,7 @@ export const App = () => {
                   <RelativeTime date={registration.date} /> ✨
                 </div>
               ))}
-              <div className="absolute left-0 right-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-indigo-400"></div>
+              <div className="absolute left-0 right-0 bottom-0 h-1/2 bg-gradient-to-t from-indigo-400"></div>
             </div>
           </div>
         </div>

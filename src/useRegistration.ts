@@ -1,5 +1,7 @@
 import { useQuery, gql } from "urql";
 
+// TODO: figure out how to generate/extract types from this query
+
 const RegistrationQuery = gql`
   query RegistrationQuery($name: String!) {
     registrations(where: { labelName: $name }, first: 1) {

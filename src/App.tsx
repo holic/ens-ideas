@@ -105,12 +105,12 @@ export const App = () => {
                 <div key={registration.name}>
                   <a
                     href={`https://app.ens.domains/name/${encodeURIComponent(
-                      `${registration.name}.eth`
+                      registration.name
                     )}`}
                     target="_blank"
                     className="text-indigo-900 font-bold hover:underline"
                   >
-                    {registration.name}.eth
+                    {registration.name}
                   </a>{" "}
                   <span className="hidden sm:inline">was registered</span>{" "}
                   <RelativeTime date={registration.date} /> ✨

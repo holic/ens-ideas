@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 const RecentRegistrationsQuery = gql`
   query RecentRegistrationsQuery {
-    registrations(first: 20, orderBy: registrationDate, orderDirection: desc) {
+    registrations(first: 100, orderBy: registrationDate, orderDirection: desc) {
       registrationDate
       expiryDate
       domain {

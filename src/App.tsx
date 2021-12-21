@@ -38,10 +38,10 @@ export const App = () => {
 
   return (
     <>
-      <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900">
+      <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900 pb-40">
         <div className="container mx-auto sm:py-4 md:py-8 lg:py-12">
-          <div className="px-4 space-y-6 md:space-y-8 sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-6/12 mx-auto">
-            <div className="space-y-2 md:space-y-4">
+          <div className="px-4 space-y-8 sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-6/12 mx-auto">
+            <div className="space-y-4">
               <div className="flex flex-wrap justify-between items-end">
                 <div className="text-xl text-white font-semibold bg-indigo-500 px-3 py-1 rounded-b-xl sm:rounded-t-xl">
                   ENS Ideas 🤔
@@ -81,48 +81,48 @@ export const App = () => {
                   minLength={3}
                 />
               </form>
+
+              {name !== "" ? (
+                <a
+                  href={url}
+                  target="_blank"
+                  className={classNames(
+                    "block p-6 rounded-xl hover:translate-x-1 text-white transition",
+                    (() => {
+                      if (name !== "" && !fetching && isRegistered === true) {
+                        return "bg-red-600 bg-opacity-80 hover:bg-red-700 hover:bg-opacity-80";
+                      }
+                      if (name !== "" && !fetching && isRegistered === false) {
+                        return "bg-green-700 bg-opacity-80 hover:bg-green-800 hover:bg-opacity-80";
+                      }
+                      return "animate-pulse opacity-70";
+                    })()
+                  )}
+                >
+                  <span className="flex gap-4 justify-between text-3xl sm:text-4xl font-semibold">
+                    <span className="group-hover:underline">{name}.eth</span>
+                    <span>&rarr;</span>
+                  </span>
+                  {registration ? (
+                    <span className="block opacity-80">
+                      registered{" "}
+                      <RelativeTime
+                        date={DateTime.fromSeconds(
+                          +registration.registrationDate
+                        )}
+                      />
+                      , expires{" "}
+                      <RelativeTime
+                        date={DateTime.fromSeconds(+registration.expiryDate)}
+                      />
+                    </span>
+                  ) : null}
+                </a>
+              ) : null}
             </div>
 
-            {name !== "" ? (
-              <a
-                href={url}
-                target="_blank"
-                className={classNames(
-                  "block p-6 rounded-xl hover:translate-x-1 text-white transition",
-                  (() => {
-                    if (name !== "" && !fetching && isRegistered === true) {
-                      return "bg-red-600 bg-opacity-80 hover:bg-red-700 hover:bg-opacity-80";
-                    }
-                    if (name !== "" && !fetching && isRegistered === false) {
-                      return "bg-green-700 bg-opacity-80 hover:bg-green-800 hover:bg-opacity-80";
-                    }
-                    return "animate-pulse opacity-70";
-                  })()
-                )}
-              >
-                <span className="flex gap-4 justify-between text-3xl sm:text-4xl font-semibold">
-                  <span className="group-hover:underline">{name}.eth</span>
-                  <span>&rarr;</span>
-                </span>
-                {registration ? (
-                  <span className="block opacity-80">
-                    registered{" "}
-                    <RelativeTime
-                      date={DateTime.fromSeconds(
-                        +registration.registrationDate
-                      )}
-                    />
-                    , expires{" "}
-                    <RelativeTime
-                      date={DateTime.fromSeconds(+registration.expiryDate)}
-                    />
-                  </span>
-                ) : null}
-              </a>
-            ) : null}
-
-            <div className="h-96 overflow-hidden space-y-1 text-indigo-700 relative">
-              {recentRegistrations.slice(0, 20).map((registration) => (
+            <div className="overflow-hidden space-y-1 text-indigo-700 relative">
+              {recentRegistrations.map((registration) => (
                 <div key={registration.name}>
                   <a
                     href={`https://app.ens.domains/name/${encodeURIComponent(
@@ -146,7 +146,7 @@ export const App = () => {
                   </span>
                 </div>
               ))}
-              <div className="absolute left-0 right-0 bottom-0 h-1/2 bg-gradient-to-t from-indigo-400 pointer-events-none"></div>
+              <div className="fixed left-0 right-0 bottom-0 h-24 bg-gradient-to-t from-indigo-400 pointer-events-none"></div>
             </div>
           </div>
         </div>

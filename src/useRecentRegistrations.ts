@@ -8,6 +8,7 @@ const RecentRegistrationsQuery = gql`
   query RecentRegistrationsQuery {
     registrations(first: 20, orderBy: registrationDate, orderDirection: desc) {
       registrationDate
+      expiryDate
       domain {
         name
       }
@@ -17,7 +18,8 @@ const RecentRegistrationsQuery = gql`
 
 type Registration = {
   name: string;
-  date: DateTime;
+  registrationDate: DateTime;
+  expiryDate: DateTime;
 };
 
 export const useRecentRegistrations = (): Registration[] => {
@@ -35,7 +37,8 @@ export const useRecentRegistrations = (): Registration[] => {
   return (
     result.data?.registrations.map((registration: any) => ({
       name: registration.domain.name,
-      date: DateTime.fromSeconds(+registration.registrationDate),
+      registrationDate: DateTime.fromSeconds(+registration.registrationDate),
+      expiryDate: DateTime.fromSeconds(+registration.expiryDate),
     })) || []
   );
 };

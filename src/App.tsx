@@ -5,6 +5,13 @@ import { useRegistration } from "./useRegistration";
 import { normalize } from "@ensdomains/eth-ens-namehash";
 import { useRecentRegistrations } from "./useRecentRegistrations";
 import { RelativeTime } from "./RelativeTime";
+import { DateTime } from "luxon";
+
+const toYears = (from: DateTime, to: DateTime): string => {
+  const seconds = to.toSeconds() - from.toSeconds();
+  const years = Math.round(seconds / (60 * 60 * 24 * 365));
+  return years === 1 ? "1 year" : `${years} years`;
+};
 
 export const App = () => {
   const [query, setQuery] = useState("");
@@ -23,7 +30,7 @@ export const App = () => {
     } catch (error) {}
   }, [query]);
 
-  const { isRegistered, error, fetching } = useRegistration(name);
+  const { isRegistered, registration, error, fetching } = useRegistration(name);
 
   const url = `https://app.ens.domains/name/${encodeURIComponent(
     `${name}.eth`
@@ -31,7 +38,7 @@ export const App = () => {
 
   return (
     <>
-      <div className="w-screen h-screen flex flex-col bg-indigo-400 text-indigo-900">
+      <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900">
         <div className="container mx-auto sm:py-4 md:py-8 lg:py-12">
           <div className="px-4 space-y-6 md:space-y-8 sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-6/12 mx-auto">
             <div className="space-y-2 md:space-y-4">
@@ -81,7 +88,7 @@ export const App = () => {
                 href={url}
                 target="_blank"
                 className={classNames(
-                  "flex flex-wrap gap-6 justify-between p-6 text-3xl sm:text-4xl font-semibold rounded-xl hover:translate-x-1 text-white transition",
+                  "block p-6 rounded-xl hover:translate-x-1 text-white transition",
                   (() => {
                     if (name !== "" && !fetching && isRegistered === true) {
                       return "bg-red-600 bg-opacity-80 hover:bg-red-700 hover:bg-opacity-80";
@@ -93,14 +100,28 @@ export const App = () => {
                   })()
                 )}
               >
-                <span className="flex flex-col flex">
+                <span className="flex gap-4 justify-between text-3xl sm:text-4xl font-semibold">
                   <span className="group-hover:underline">{name}.eth</span>
+                  <span>&rarr;</span>
                 </span>
-                <span className="">&rarr;</span>
+                {registration ? (
+                  <span className="block opacity-80">
+                    registered{" "}
+                    <RelativeTime
+                      date={DateTime.fromSeconds(
+                        +registration.registrationDate
+                      )}
+                    />
+                    , expires{" "}
+                    <RelativeTime
+                      date={DateTime.fromSeconds(+registration.expiryDate)}
+                    />
+                  </span>
+                ) : null}
               </a>
             ) : null}
 
-            <div className="h-60 overflow-hidden text-indigo-700 flex flex-col gap-1 relative">
+            <div className="h-96 overflow-hidden space-y-1 text-indigo-700 relative">
               {recentRegistrations.slice(0, 20).map((registration) => (
                 <div key={registration.name}>
                   <a
@@ -112,11 +133,20 @@ export const App = () => {
                   >
                     {registration.name}
                   </a>{" "}
-                  <span className="hidden sm:inline">was registered</span>{" "}
-                  <RelativeTime date={registration.date} /> ✨
+                  <span>
+                    <span className="hidden sm:inline">was registered</span> for{" "}
+                    {toYears(
+                      registration.registrationDate,
+                      registration.expiryDate
+                    )}
+                  </span>{" "}
+                  ✨{" "}
+                  <span className="hidden sm:inline opacity-40 px-2">
+                    <RelativeTime date={registration.registrationDate} />
+                  </span>
                 </div>
               ))}
-              <div className="absolute left-0 right-0 bottom-0 h-1/2 bg-gradient-to-t from-indigo-400"></div>
+              <div className="absolute left-0 right-0 bottom-0 h-1/2 bg-gradient-to-t from-indigo-400 pointer-events-none"></div>
             </div>
           </div>
         </div>

@@ -15,17 +15,17 @@ module.exports = {
       },
     ],
   }),
-  redirects: async () => [
-    {
-      has: [
-        {
-          type: "host",
-          value: "ensideas.com",
-        },
-      ],
-      source: "/api/:path*",
-      destination: "https://api.ensideas.com/:path*",
-      permanent: false,
-    },
-  ],
+  // redirects: async () => [
+  //   {
+  //     has: [
+  //       {
+  //         type: "host",
+  //         value: "ensideas.com",
+  //       },
+  //     ],
+  //     source: "/api/:path*",
+  //     destination: "https://api.ensideas.com/:path*",
+  //     permanent: false,
+  //   },
+  // ],
 };

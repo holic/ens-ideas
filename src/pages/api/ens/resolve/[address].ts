@@ -32,7 +32,7 @@ export default async function handler(
       .status(200)
       .setHeader(
         "Cache-Control",
-        `max-age=${60 * 60 * 1}, stale-while-revalidate`
+        `s-maxage=${60 * 60 * 1}, stale-while-revalidate`
       )
       .json({ address, name, avatar });
   } catch (error: any) {

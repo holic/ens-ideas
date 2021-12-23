@@ -27,7 +27,14 @@ export default async function handler(
   try {
     const name = await provider.lookupAddress(address);
     const avatar = name ? await provider.getAvatar(name) : null;
-    res.status(200).json({ address, name, avatar });
+
+    res
+      .status(200)
+      .setHeader(
+        "Cache-Control",
+        `max-age=${60 * 60 * 1}, stale-while-revalidate`
+      )
+      .json({ address, name, avatar });
   } catch (error: any) {
     res.status(500).json({ address, error: error.message });
   }

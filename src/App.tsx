@@ -51,6 +51,7 @@ export const App = () => {
                   <a
                     href="https://twitter.com/frolic"
                     target="_blank"
+                    rel="noreferrer"
                     className="font-bold text-indigo-900 hover:underline"
                   >
                     frolic.eth
@@ -86,6 +87,7 @@ export const App = () => {
                 <a
                   href={url}
                   target="_blank"
+                  rel="noreferrer"
                   className={classNames(
                     "block p-6 rounded-xl hover:translate-x-1 text-white transition",
                     (() => {
@@ -129,6 +131,7 @@ export const App = () => {
                       registration.name
                     )}`}
                     target="_blank"
+                    rel="noreferrer"
                     className="text-indigo-900 font-bold hover:underline"
                   >
                     {registration.name}

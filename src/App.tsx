@@ -1,33 +1,9 @@
-import { useEffect, useState } from "react";
-import classNames from "classnames";
-import { useRegistration } from "./useRegistration";
-// @ts-ignore
-import { normalize } from "@ensdomains/eth-ens-namehash";
-import { RelativeTime } from "./RelativeTime";
-import { DateTime } from "luxon";
+import { useState } from "react";
 import { RecentRegistrations } from "./RecentRegistrations";
+import { DomainCard } from "./DomainCard";
 
 export const App = () => {
-  const [query, setQuery] = useState("");
   const [name, setName] = useState("");
-
-  useEffect(() => {
-    try {
-      setName(
-        normalize(
-          query
-            .replace(/[\s\\'!"#$%&()*+,.\/:;<=>?@\[\]^_`{|}~]/g, "")
-            .replace(/^-+|-+$/g, "")
-        )
-      );
-    } catch (error) {}
-  }, [query]);
-
-  const { isRegistered, registration, error, fetching } = useRegistration(name);
-
-  const url = `https://app.ens.domains/name/${encodeURIComponent(
-    `${name}.eth`
-  )}`;
 
   return (
     <>
@@ -51,69 +27,39 @@ export const App = () => {
                   </a>
                 </div>
               </div>
+
               <form
+                className="space-y-4"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  window.open(url, "_blank");
+                  event.currentTarget
+                    .querySelector<HTMLAnchorElement>("a[href]")
+                    ?.click();
                 }}
-                className="-mx-2"
               >
-                <input
-                  className="w-full outline-none transition bg-white text-indigo-800 focus:ring-4 focus:ring-indigo-500 rounded-full px-6 py-3 text-2xl sm:text-3xl"
-                  placeholder="Search .eth domains"
-                  value={query}
-                  onChange={(event) => {
-                    event.preventDefault();
-                    try {
-                      setQuery(event.currentTarget.value);
-                    } catch (error) {}
-                  }}
-                  autoFocus
-                  spellCheck={false}
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  minLength={3}
+                <div className="-mx-2">
+                  <input
+                    className="w-full outline-none transition bg-white text-indigo-800 focus:ring-4 focus:ring-indigo-500 rounded-full px-6 py-3 text-2xl sm:text-3xl"
+                    placeholder="Search .eth domains"
+                    value={name}
+                    onChange={(event) => {
+                      event.preventDefault();
+                      setName(event.currentTarget.value);
+                    }}
+                    autoFocus
+                    spellCheck={false}
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    minLength={3}
+                  />
+                </div>
+
+                <DomainCard
+                  // Add key to force re-rendering so the data-in-progress doesn't linger
+                  key={name}
+                  name={name}
                 />
               </form>
-
-              {name !== "" ? (
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={classNames(
-                    "block p-6 rounded-xl hover:translate-x-1 text-white transition",
-                    (() => {
-                      if (name !== "" && !fetching && isRegistered === true) {
-                        return "bg-red-600 bg-opacity-80 hover:bg-red-700 hover:bg-opacity-80";
-                      }
-                      if (name !== "" && !fetching && isRegistered === false) {
-                        return "bg-green-700 bg-opacity-80 hover:bg-green-800 hover:bg-opacity-80";
-                      }
-                      return "animate-pulse opacity-70";
-                    })()
-                  )}
-                >
-                  <span className="flex gap-4 justify-between text-3xl sm:text-4xl font-semibold">
-                    <span className="group-hover:underline">{name}.eth</span>
-                    <span>&rarr;</span>
-                  </span>
-                  {registration ? (
-                    <span className="block opacity-80">
-                      registered{" "}
-                      <RelativeTime
-                        date={DateTime.fromSeconds(
-                          +registration.registrationDate
-                        )}
-                      />
-                      , expires{" "}
-                      <RelativeTime
-                        date={DateTime.fromSeconds(+registration.expiryDate)}
-                      />
-                    </span>
-                  ) : null}
-                </a>
-              ) : null}
             </div>
 
             <RecentRegistrations />

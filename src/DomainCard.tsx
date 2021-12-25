@@ -35,10 +35,13 @@ export const DomainCard = ({ name }: Props) => {
     `${normalizedName}.eth`
   )}`;
 
+  const expiryDate = registration
+    ? DateTime.fromSeconds(+registration.expiryDate)
+    : null;
+  const isExpired = expiryDate ? expiryDate.diffNow().toMillis() < 0 : null;
+
   return (
     <a
-      // Add key to force re-rendering so the data-in-progress doesn't linger
-      key={normalizedName}
       href={url}
       target="_blank"
       rel="noreferrer"
@@ -46,6 +49,9 @@ export const DomainCard = ({ name }: Props) => {
         "block p-6 rounded-xl hover:translate-x-1 text-white transition",
         (() => {
           if (normalizedName && !fetching && isRegistered === true) {
+            if (isExpired) {
+              return "bg-orange-600 bg-opacity-80 hover:bg-orange-700 hover:bg-opacity-80";
+            }
             return "bg-red-600 bg-opacity-80 hover:bg-red-700 hover:bg-opacity-80";
           }
           if (normalizedName && !fetching && isRegistered === false) {
@@ -65,7 +71,7 @@ export const DomainCard = ({ name }: Props) => {
           <RelativeTime
             date={DateTime.fromSeconds(+registration.registrationDate)}
           />
-          , expires{" "}
+          , {isExpired ? "expired" : "expires"}{" "}
           <RelativeTime date={DateTime.fromSeconds(+registration.expiryDate)} />
         </span>
       ) : null}

@@ -31,11 +31,7 @@ export default async function handler(
     res
       .status(200)
       .setHeader(
-        "Cloudflare-CDN-Cache-Control",
-        `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
-      )
-      .setHeader(
-        "X-Sent-Cloudflare-CDN-Cache-Control",
+        "CDN-Cache-Control",
         `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
       )
       .json({ address, name, avatar });

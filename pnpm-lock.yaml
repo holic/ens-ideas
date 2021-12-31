@@ -6,6 +6,7 @@ specifiers:
   '@ethersproject/bytes': ^5.5.0
   '@ethersproject/providers': ^5.5.1
   '@typechain/ethers-v5': ^8.0.5
+  '@types/lodash': ^4.14.178
   '@types/luxon': ^2.0.8
   '@types/node': 17.0.2
   '@types/react': 17.0.37
@@ -17,6 +18,7 @@ specifiers:
   ethers: ^5.5.2
   graphql: ^16.2.0
   idna-uts46-hx: ^3.4.0
+  lodash: ^4.17.21
   luxon: ^2.2.0
   next: ^12.0.7
   postcss: ^8.4.5
@@ -35,6 +37,7 @@ dependencies:
   classnames: 2.3.1
   graphql: 16.2.0
   idna-uts46-hx: 3.4.0
+  lodash: 4.17.21
   luxon: 2.2.0
   next: 12.0.7_react-dom@17.0.2+react@17.0.2
   react: 17.0.2
@@ -47,6 +50,7 @@ devDependencies:
   '@ethersproject/abi': 5.5.0
   '@ethersproject/bytes': 5.5.0
   '@typechain/ethers-v5': 8.0.5_bef5011c7dbb3e0d73c80e47fefa4d66
+  '@types/lodash': 4.14.178
   '@types/luxon': 2.0.8
   '@types/node': 17.0.2
   '@types/react': 17.0.37
@@ -688,6 +692,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
+    dev: true
+
+  /@types/lodash/4.14.178:
+    resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
     dev: true
 
   /@types/luxon/2.0.8:
@@ -2557,7 +2565,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RecentRegistrations } from "./RecentRegistrations";
 import { DomainCard } from "./DomainCard";
+import { Header } from "./Header";
 
 export const App = () => {
   const [name, setName] = useState("");
@@ -11,22 +12,7 @@ export const App = () => {
         <div className="container mx-auto sm:py-4 md:py-8 lg:py-12">
           <div className="px-4 space-y-8 sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-6/12 mx-auto">
             <div className="space-y-4">
-              <div className="flex flex-wrap justify-between items-end">
-                <div className="text-xl text-white font-semibold bg-indigo-500 px-3 py-1 rounded-b-xl sm:rounded-t-xl">
-                  ENS Ideas 🤔
-                </div>
-                <div className="text-indigo-700">
-                  by{" "}
-                  <a
-                    href="https://twitter.com/frolic"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-bold text-indigo-900 hover:underline"
-                  >
-                    frolic.eth
-                  </a>
-                </div>
-              </div>
+              <Header />
 
               <form
                 className="space-y-4"

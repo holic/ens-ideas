@@ -1,17 +1,32 @@
 import type { NextPage } from "next";
 import { App } from "../App";
-import { createClient, Provider as GraphProvider } from "urql";
+import { Provider as GraphProvider } from "urql";
+import { graph } from "../urql";
+import Head from "next/head";
 
-export const graph = createClient({
-  url: "https://api.thegraph.com/subgraphs/name/ensdomains/ens",
-});
-
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
-    <GraphProvider value={graph}>
-      <App />
-    </GraphProvider>
+    <>
+      <Head>
+        <meta
+          key="title"
+          name="og:title"
+          content="ENS Ideas — Instant .eth domain search"
+        />
+        <meta name="og:url" content="https://ensideas.com/" />
+        <meta
+          name="og:description"
+          content="Search for .eth domains and get inspired by a realtime feed of .eth domain registrations"
+        />
+        <meta name="og:image" content="https://ensideas.com/twitter-card.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@frolic" />
+      </Head>
+      <GraphProvider value={graph}>
+        <App />
+      </GraphProvider>
+    </>
   );
 };
 
-export default Home;
+export default HomePage;

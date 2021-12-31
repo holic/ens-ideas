@@ -89,9 +89,11 @@ const EmojiPage: NextPage = () => {
         <meta name="og:url" content="https://ensideas.com/emoji" />
         <meta
           name="og:description"
-          content={`There are ${emojis.length.toLocaleString()} emojis that are considered
-          valid ENS names. These ones are available.`}
+          content={`There are ${emojis.length.toLocaleString()} emojis that are considered valid ENS names. These ones are available.`}
         />
+        <meta name="og:image" content="https://ensideas.com/twitter-card.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@frolic" />
       </Head>
       <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900 p-8 pb-40 space-y-8">
         <Header />

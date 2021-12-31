@@ -89,7 +89,7 @@ const EmojiPage: NextPage = () => {
         <meta name="og:url" content="https://ensideas.com/emoji" />
         <meta
           name="og:description"
-          content={`There are ${emojis.length.toLocaleString()} emojis that are considered valid ENS names. These ones are available.`}
+          content={`Check which of the ${emojis.length.toLocaleString()} emoji .eth domains are still available to register. 👀`}
         />
         <meta name="og:image" content="https://ensideas.com/twitter-card.png" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -105,10 +105,13 @@ const EmojiPage: NextPage = () => {
             There are {emojis.length.toLocaleString()} emojis that are
             considered valid ENS names.{" "}
             {value ? (
-              <span className="pb-1 border-b-4 border-green-400 border-opacity-50">
-                {(emojis.length - value.length).toLocaleString()} of them are
-                available.
-              </span>
+              <>
+                <span className="pb-1 border-b-4 border-green-400 border-opacity-50">
+                  {(emojis.length - value.length).toLocaleString()} of them are
+                  available!
+                </span>{" "}
+                👀
+              </>
             ) : null}
           </p>
         </div>

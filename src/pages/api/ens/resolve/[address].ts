@@ -2,9 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 
-const provider = new StaticJsonRpcProvider(
-  "https://eth-mainnet.alchemyapi.io/v2/5v4BuuWBFvvYHZoZZP5xFo2q1ldvABwj"
-);
+// Cloudflare ETH node has a 1k req/minute limit
+const provider = new StaticJsonRpcProvider("https://cloudflare-eth.com");
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;

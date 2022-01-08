@@ -27,7 +27,7 @@ export default async function handler(
   const address = getAddress(inputAddress.toLowerCase());
 
   if (address !== inputAddress) {
-    return res.redirect(308, `/api/ens/resolve/${address}`);
+    return res.redirect(308, `/ens/resolve/${address}`);
   }
 
   try {

@@ -2,12 +2,22 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress } from "@ethersproject/address";
+import url from "url";
 
 // Cloudflare ETH node has a 1k req/minute limit
 const provider = new StaticJsonRpcProvider("https://cloudflare-eth.com");
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;
+};
+
+const resolve = (from: string, to: string) => {
+  const resolvedUrl = new URL(to, new URL(from, "resolve://"));
+  if (resolvedUrl.protocol === "resolve:") {
+    const { pathname, search, hash } = resolvedUrl;
+    return `${pathname}${search}${hash}`;
+  }
+  return resolvedUrl.toString();
 };
 
 type Data =
@@ -27,7 +37,7 @@ export default async function handler(
   const address = getAddress(inputAddress.toLowerCase());
 
   if (address !== inputAddress) {
-    return res.redirect(308, `/ens/resolve/${address}`);
+    return res.redirect(308, resolve(req.url!, address));
   }
 
   try {

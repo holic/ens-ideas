@@ -15,6 +15,19 @@ module.exports = {
       },
     ],
   }),
+  redirects: async () => [
+    {
+      has: [
+        {
+          type: "host",
+          value: "api.ensideas.com",
+        },
+      ],
+      source: "/api/:path*",
+      destination: "/:path*",
+      permanent: true,
+    },
+  ],
   headers: async () => [
     {
       has: [

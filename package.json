@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@ensdomains/eth-ens-namehash": "^2.0.15",
+    "@ethersproject/address": "^5.5.0",
     "@ethersproject/providers": "^5.5.2",
     "classnames": "^2.3.1",
     "graphql": "^16.2.0",
-    "idna-uts46-hx": "^3.4.0",
     "lodash": "^4.17.21",
     "luxon": "^2.2.0",
     "next": "^12.0.7",

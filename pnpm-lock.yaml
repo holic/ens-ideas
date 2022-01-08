@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@ensdomains/eth-ens-namehash': ^2.0.15
   '@ethersproject/abi': ^5.5.0
+  '@ethersproject/address': ^5.5.0
   '@ethersproject/bytes': ^5.5.0
   '@ethersproject/providers': ^5.5.2
   '@typechain/ethers-v5': ^8.0.5
@@ -17,7 +18,6 @@ specifiers:
   eslint-config-next: 12.0.7
   ethers: ^5.5.2
   graphql: ^16.2.0
-  idna-uts46-hx: ^3.4.0
   lodash: ^4.17.21
   luxon: ^2.2.0
   next: ^12.0.7
@@ -33,10 +33,10 @@ specifiers:
 
 dependencies:
   '@ensdomains/eth-ens-namehash': 2.0.15
+  '@ethersproject/address': 5.5.0
   '@ethersproject/providers': 5.5.2
   classnames: 2.3.1
   graphql: 16.2.0
-  idna-uts46-hx: 3.4.0
   lodash: 4.17.21
   luxon: 2.2.0
   next: 12.0.7_react-dom@17.0.2+react@17.0.2
@@ -2228,13 +2228,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
-    dev: false
-
-  /idna-uts46-hx/3.4.0:
-    resolution: {integrity: sha512-b1I4qYTcJcX1TANn8OhOGrQUIWOfZUWrLKWDeKbV6posVLjp7OTqFKX3N20efrIMzQM1KhiphOEazBEEUFR9bg==}
-    engines: {node: '>=10.18.0', npm: '>=6.13.4'}
-    dependencies:
-      punycode: 2.1.1
     dev: false
 
   /ieee754/1.2.1:

@@ -34,10 +34,11 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const inputAddress = firstParam(req.query.address);
-  const address = getAddress(inputAddress.toLowerCase());
+  const lowercaseAddress = inputAddress.toLowerCase();
+  const address = getAddress(lowercaseAddress);
 
-  if (address !== inputAddress) {
-    return res.redirect(308, resolve(req.url!, address));
+  if (inputAddress !== lowercaseAddress) {
+    return res.redirect(307, resolve(req.url!, lowercaseAddress));
   }
 
   try {

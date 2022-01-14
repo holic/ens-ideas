@@ -4,8 +4,9 @@ import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress } from "@ethersproject/address";
 import url from "url";
 
-// Cloudflare ETH node has a 1k req/minute limit
-const provider = new StaticJsonRpcProvider("https://cloudflare-eth.com");
+const provider = new StaticJsonRpcProvider(
+  "https://eth-mainnet.alchemyapi.io/v2/5v4BuuWBFvvYHZoZZP5xFo2q1ldvABwj"
+);
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;

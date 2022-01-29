@@ -99,21 +99,43 @@ const AboutPage: NextPage = () => (
               {JSON.stringify(apiResponse, null, 2)}
             </code>
           </div>
-          <p>
-            <dl>
-              <dt className="mt-4 text-green-200">address</dt>
-              <dd>Ethereum address, in checksum format</dd>
-              <dt className="mt-4 text-green-200">name</dt>
-              <dd>ENS name, if reverse record is set to an active domain</dd>
-              <dt className="mt-4 text-green-200">displayName</dt>
-              <dd>
-                ENS name or, if none set, truncated address (e.g.
-                0xC9C&hellip;36d0)
-              </dd>
-              <dt className="mt-4 text-green-200">avatar</dt>
-              <dd>avatar image URL, if set</dd>
-            </dl>
-          </p>
+          <table className="border-2 border-black">
+            <tbody>
+              <tr>
+                <td className="p-3 border-2 border-black text-green-200">
+                  address
+                </td>
+                <td className="p-3 border-2 border-black">
+                  Ethereum address, in checksum format
+                </td>
+              </tr>
+              <tr>
+                <td className="p-3 border-2 border-black text-green-200">
+                  name
+                </td>
+                <td className="p-3 border-2 border-black">
+                  ENS name, if reverse record is set to an active domain
+                </td>
+              </tr>
+              <tr>
+                <td className="p-3 border-2 border-black text-green-200">
+                  displayName
+                </td>
+                <td className="p-3 border-2 border-black">
+                  ENS name or, if none set, truncated atdress (e.g.
+                  0xC9C&hellip;36d0)
+                </td>
+              </tr>
+              <tr>
+                <td className="p-3 border-2 border-black text-green-200">
+                  avatar
+                </td>
+                <td className="p-3 border-2 border-black">
+                  avatar image URL, if set
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

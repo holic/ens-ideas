@@ -122,7 +122,7 @@ const AboutPage: NextPage = () => (
                   displayName
                 </td>
                 <td className="p-3 border-2 border-black">
-                  ENS name or, if none set, truncated atdress (e.g.
+                  ENS name or, if none set, truncated address (e.g.
                   0xC9C&hellip;36d0)
                 </td>
               </tr>

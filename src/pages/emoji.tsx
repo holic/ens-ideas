@@ -95,7 +95,7 @@ const EmojiPage: NextPage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:creator" content="@frolic" />
       </Head>
-      <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900 p-8 pb-40 space-y-8">
+      <div className="w-screen min-h-screen flex flex-col bg-indigo-400 text-indigo-900 sm:pt-12 px-4 sm:px-12 pb-40 space-y-12">
         <Header />
         <div>
           <h1 className="text-4xl font-medium leading-tight">

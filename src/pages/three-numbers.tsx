@@ -1,23 +1,23 @@
 import type { NextPage } from "next";
-import names from "../emoji.json";
-import classNames from "classnames";
 import { Header } from "../Header";
 import Head from "next/head";
 import { useBulkAvailability } from "../useBulkAvailability";
 import { NameStatusCard } from "../NameStatusCard";
 
-const EmojiPage: NextPage = () => {
+const names = new Array(1000).fill(null).map((_, i) => `${i}`.padStart(3, "0"));
+
+const ThreeNumbers: NextPage = () => {
   const { value, loading } = useBulkAvailability(names);
   return (
     <>
       <Head>
-        <title>Available emoji .eth domains</title>
+        <title>Available three-number .eth domains</title>
 
-        <meta name="og:title" content="Available emoji .eth domains" />
-        <meta name="og:url" content="https://ensideas.com/emoji" />
+        <meta name="og:title" content="Available three-number .eth domains" />
+        <meta name="og:url" content="https://ensideas.com/three-numbers" />
         <meta
           name="og:description"
-          content={`Check which of the ${names.length.toLocaleString()} emoji .eth domains are still available to register. 👀`}
+          content={`Check which of the ${names.length.toLocaleString()} three-number .eth domains are still available to register. 👀`}
         />
         <meta name="og:image" content="https://ensideas.com/twitter-card.png" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -27,11 +27,11 @@ const EmojiPage: NextPage = () => {
         <Header />
         <div>
           <h1 className="text-4xl font-medium leading-tight">
-            Available emoji .eth domains
+            Available three-number .eth domains
           </h1>
           <p className="text-lg text-indigo-700">
-            There are {names.length.toLocaleString()} emojis that are considered
-            valid ENS names.{" "}
+            There are {names.length.toLocaleString()} possible three-number ENS
+            names.{" "}
             {value ? (
               <>
                 <span className="pb-1 border-b-4 border-green-400 border-opacity-50">
@@ -43,10 +43,11 @@ const EmojiPage: NextPage = () => {
             ) : null}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 font-mono">
           {names.map((name) => (
             <NameStatusCard
               key={name}
+              size="small"
               name={name}
               isPending={loading || !value}
               isRegistered={value ? value.includes(name) : false}
@@ -58,4 +59,4 @@ const EmojiPage: NextPage = () => {
   );
 };
 
-export default EmojiPage;
+export default ThreeNumbers;

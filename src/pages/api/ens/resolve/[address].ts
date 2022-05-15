@@ -26,12 +26,19 @@ type Data = {
   name: string | null;
   displayName: string;
   avatar: string | null;
+  description: string | null;
+  url: string | null;
+  twitter: string | null;
+  github: string | null;
+  telegram: string | null;
+  email: string | null;
   error?: string;
 };
 
 const resolveAddress = async (
   lowercaseAddress: string,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data>,
+  requestsRecords: boolean
 ) => {
   const address = getAddress(lowercaseAddress);
   let displayName = address.replace(
@@ -47,42 +54,85 @@ const resolveAddress = async (
 
     const avatar = name ? await provider.getAvatar(name) : null;
 
+    let resolver;
+
+    if (requestsRecords) {
+      resolver = name ? await provider.getResolver(name) : null;
+    }
+
+    const description = resolver ? await resolver.getText('description') : null;
+    const url = resolver ? await resolver.getText('url') : null;
+    const twitter = resolver ? await resolver.getText('com.twitter') : null;
+    const github = resolver ? await resolver.getText('com.github') : null;
+    const telegram = resolver ? await resolver.getText('org.telegram') : null;
+    const email = resolver ? await resolver.getText('email') : null;
+
     res
       .status(200)
       .setHeader(
         "CDN-Cache-Control",
         `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
       )
-      .json({ address, name, displayName, avatar });
+      .json({ address, name, displayName, avatar, description, url, twitter, github, telegram, email });
   } catch (error: any) {
     res.status(500).json({
       address,
       name: null,
       displayName,
       avatar: null,
+      description: null,
+      url: null,
+      twitter: null,
+      github: null,
+      telegram: null,
+      email: null,
       error: error.message,
     });
   }
 };
 
-const resolveName = async (name: string, res: NextApiResponse<Data>) => {
+const resolveName = async (
+  name: string,
+  res: NextApiResponse<Data>,
+  requestsRecords: boolean
+) => {
   const displayName = name;
   try {
     const address = await provider.resolveName(name);
     const avatar = await provider.getAvatar(name);
+    
+    let resolver;
+
+    if (requestsRecords) {
+      resolver = name ? await provider.getResolver(name) : null;
+    }
+    
+    const description = resolver ? await resolver.getText('description') : null;
+    const url = resolver ? await resolver.getText('url') : null;
+    const twitter = resolver ? await resolver.getText('com.twitter') : null;
+    const github = resolver ? await resolver.getText('com.github') : null;
+    const telegram = resolver ? await resolver.getText('org.telegram') : null;
+    const email = resolver ? await resolver.getText('email') : null;
+
     res
       .status(200)
       .setHeader(
         "CDN-Cache-Control",
         `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
       )
-      .json({ address, name, displayName, avatar });
+      .json({ address, name, displayName, avatar, description, url, twitter, github, telegram, email });
   } catch (error: any) {
     res.status(500).json({
       address: null,
       name,
       displayName,
       avatar: null,
+      description: null,
+      url: null,
+      twitter: null,
+      github: null,
+      telegram: null,
+      email: null,
       error: error.message,
     });
   }
@@ -99,7 +149,9 @@ export default async function handler(
     return res.redirect(307, resolve(req.url!, lowercaseAddress));
   }
 
+  const requestsRecords = req.query.full !== undefined;
+
   return isAddress(lowercaseAddress)
-    ? resolveAddress(lowercaseAddress, res)
-    : resolveName(lowercaseAddress, res);
+    ? resolveAddress(lowercaseAddress, res, requestsRecords)
+    : resolveName(lowercaseAddress, res, requestsRecords);
 }

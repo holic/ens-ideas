@@ -4,9 +4,7 @@ import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress, isAddress } from "@ethersproject/address";
 import url from "url";
 
-const provider = new StaticJsonRpcProvider(
-  "https://eth-mainnet.alchemyapi.io/v2/5v4BuuWBFvvYHZoZZP5xFo2q1ldvABwj"
-);
+const provider = new StaticJsonRpcProvider(process.env.ETHEREUM_RPC_URL);
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;

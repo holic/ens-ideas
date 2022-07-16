@@ -66,8 +66,10 @@ const resolveAddress = async (
 const resolveName = async (name: string, res: NextApiResponse<Data>) => {
   const displayName = name;
   try {
-    const address = await provider.resolveName(name);
-    const avatar = await provider.getAvatar(name);
+    const [address, avatar] = await Promise.all([
+      provider.resolveName(name),
+      provider.getAvatar(name),
+    ]);
     res
       .status(200)
       .setHeader(

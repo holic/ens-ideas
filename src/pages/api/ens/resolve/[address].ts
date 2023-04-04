@@ -1,10 +1,12 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { StaticJsonRpcProvider } from "@ethersproject/providers";
-import { getAddress, isAddress } from "@ethersproject/address";
-import url from "url";
+import { isAddress, getAddress, createPublicClient, http } from "viem";
+import { mainnet } from "viem/chains";
+import { normalize } from "viem/ens";
 
-const provider = new StaticJsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(process.env.ETHEREUM_RPC_URL),
+});
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;
@@ -31,6 +33,7 @@ const resolveAddress = async (
   lowercaseAddress: string,
   res: NextApiResponse<Data>
 ) => {
+  const start = Date.now();
   const address = getAddress(lowercaseAddress);
   let displayName = address.replace(
     /^(0x[0-9A-F]{3})[0-9A-F]+([0-9A-F]{4})$/i,
@@ -38,12 +41,14 @@ const resolveAddress = async (
   );
 
   try {
-    const name = await provider.lookupAddress(address);
+    const name = await publicClient.getEnsName({ address });
     if (name) {
       displayName = name;
     }
 
-    const avatar = name ? await provider.getAvatar(name) : null;
+    const avatar = name
+      ? await publicClient.getEnsAvatar({ name: normalize(name) })
+      : null;
 
     res
       .status(200)
@@ -51,24 +56,29 @@ const resolveAddress = async (
         "CDN-Cache-Control",
         `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
       )
+      .setHeader("X-Resolve-Time", `${Date.now() - start}ms`)
       .json({ address, name, displayName, avatar });
   } catch (error: any) {
-    res.status(500).json({
-      address,
-      name: null,
-      displayName,
-      avatar: null,
-      error: error.message,
-    });
+    res
+      .status(500)
+      .setHeader("X-Resolve-Time", `${Date.now() - start}ms`)
+      .json({
+        address,
+        name: null,
+        displayName,
+        avatar: null,
+        error: error.message,
+      });
   }
 };
 
 const resolveName = async (name: string, res: NextApiResponse<Data>) => {
+  const start = Date.now();
   const displayName = name;
   try {
     const [address, avatar] = await Promise.all([
-      provider.resolveName(name),
-      provider.getAvatar(name),
+      publicClient.getEnsAddress({ name: normalize(name) }),
+      publicClient.getEnsAvatar({ name: normalize(name) }),
     ]);
     res
       .status(200)
@@ -76,15 +86,19 @@ const resolveName = async (name: string, res: NextApiResponse<Data>) => {
         "CDN-Cache-Control",
         `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
       )
+      .setHeader("X-Resolve-Time", `${Date.now() - start}ms`)
       .json({ address, name, displayName, avatar });
   } catch (error: any) {
-    res.status(500).json({
-      address: null,
-      name,
-      displayName,
-      avatar: null,
-      error: error.message,
-    });
+    res
+      .status(500)
+      .setHeader("X-Resolve-Time", `${Date.now() - start}ms`)
+      .json({
+        address: null,
+        name,
+        displayName,
+        avatar: null,
+        error: error.message,
+      });
   }
 };
 

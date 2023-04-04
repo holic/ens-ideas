@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
-import { getAddress, isAddress, createPublicClient, http } from "viem";
+import { getAddress, isAddress, createPublicClient, http, Address } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 
@@ -34,10 +34,22 @@ type ResponseData = {
 const getEnsName = async ({
   address,
 }: {
-  address: string;
+  address: Address;
 }): Promise<string | null> => {
-  // return publicClient.getEnsName({ address });
-  return provider.lookupAddress(address);
+  const ethersPromise = provider.lookupAddress(address);
+  Promise.allSettled([
+    ethersPromise,
+    publicClient.getEnsName({ address }),
+  ]).then(([ethersResult, viemResult]) => {
+    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
+      console.warn("Inconsistent results for getEnsName:", {
+        address,
+        ethersResult,
+        viemResult,
+      });
+    }
+  });
+  return ethersPromise;
 };
 
 const getEnsAddress = async ({
@@ -45,8 +57,20 @@ const getEnsAddress = async ({
 }: {
   name: string;
 }): Promise<string | null> => {
-  // return publicClient.getEnsAddress({ name: normalize(name) });
-  return provider.resolveName(name);
+  const ethersPromise = provider.resolveName(name);
+  Promise.allSettled([
+    ethersPromise,
+    publicClient.getEnsAddress({ name: normalize(name) }),
+  ]).then(([ethersResult, viemResult]) => {
+    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
+      console.warn("Inconsistent results for getEnsAddress:", {
+        name,
+        ethersResult,
+        viemResult,
+      });
+    }
+  });
+  return ethersPromise;
 };
 
 const getEnsAvatar = async ({
@@ -54,8 +78,20 @@ const getEnsAvatar = async ({
 }: {
   name: string;
 }): Promise<string | null> => {
-  // return publicClient.getEnsAvatar({ name: normalize(name) })
-  return provider.getAvatar(name);
+  const ethersPromise = provider.getAvatar(name);
+  Promise.allSettled([
+    ethersPromise,
+    publicClient.getEnsAvatar({ name: normalize(name) }),
+  ]).then(([ethersResult, viemResult]) => {
+    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
+      console.warn("Inconsistent results for getEnsAvatar:", {
+        name,
+        ethersResult,
+        viemResult,
+      });
+    }
+  });
+  return ethersPromise;
 };
 
 const resolveAddress = async (

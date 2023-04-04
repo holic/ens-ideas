@@ -8,6 +8,10 @@
     "lint": "next lint",
     "typechain": "typechain --target=ethers-v5 --out-dir=typechain-types contracts/**/*.json"
   },
+  "engines": {
+    "node": "18.x",
+    "pnpm": "7.x"
+  },
   "dependencies": {
     "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ethersproject/address": "^5.7.0",

@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress, isAddress, createPublicClient, http, Address } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 
-const provider = new StaticJsonRpcProvider(process.env.ETHEREUM_RPC_URL);
 const publicClient = createPublicClient({
   chain: mainnet,
   transport: http(process.env.ETHEREUM_RPC_URL),
@@ -31,69 +29,6 @@ type ResponseData = {
   error?: string;
 };
 
-const getEnsName = async ({
-  address,
-}: {
-  address: Address;
-}): Promise<string | null> => {
-  const ethersPromise = provider.lookupAddress(address);
-  Promise.allSettled([
-    ethersPromise,
-    publicClient.getEnsName({ address }),
-  ]).then(([ethersResult, viemResult]) => {
-    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
-      console.warn("Inconsistent results for getEnsName:", {
-        address,
-        ethersResult,
-        viemResult,
-      });
-    }
-  });
-  return ethersPromise;
-};
-
-const getEnsAddress = async ({
-  name,
-}: {
-  name: string;
-}): Promise<string | null> => {
-  const ethersPromise = provider.resolveName(name);
-  Promise.allSettled([
-    ethersPromise,
-    publicClient.getEnsAddress({ name: normalize(name) }),
-  ]).then(([ethersResult, viemResult]) => {
-    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
-      console.warn("Inconsistent results for getEnsAddress:", {
-        name,
-        ethersResult,
-        viemResult,
-      });
-    }
-  });
-  return ethersPromise;
-};
-
-const getEnsAvatar = async ({
-  name,
-}: {
-  name: string;
-}): Promise<string | null> => {
-  const ethersPromise = provider.getAvatar(name);
-  Promise.allSettled([
-    ethersPromise,
-    publicClient.getEnsAvatar({ name: normalize(name) }),
-  ]).then(([ethersResult, viemResult]) => {
-    if (JSON.stringify(ethersResult) !== JSON.stringify(viemResult)) {
-      console.warn("Inconsistent results for getEnsAvatar:", {
-        name,
-        ethersResult,
-        viemResult,
-      });
-    }
-  });
-  return ethersPromise;
-};
-
 const resolveAddress = async (
   lowercaseAddress: string
 ): Promise<ResponseData> => {
@@ -104,11 +39,13 @@ const resolveAddress = async (
   );
 
   try {
-    const name = await getEnsName({ address });
+    const name = await publicClient.getEnsName({ address });
     if (name) {
       displayName = name;
     }
-    const avatar = name ? await getEnsAvatar({ name }) : null;
+    const avatar = name
+      ? await publicClient.getEnsAvatar({ name: normalize(name) })
+      : null;
     return { address, name, displayName, avatar };
   } catch (error: any) {
     return {
@@ -125,8 +62,8 @@ const resolveName = async (name: string): Promise<ResponseData> => {
   const displayName = name;
   try {
     const [address, avatar] = await Promise.all([
-      getEnsAddress({ name }),
-      getEnsAvatar({ name }),
+      publicClient.getEnsAddress({ name: normalize(name) }),
+      publicClient.getEnsAvatar({ name: normalize(name) }),
     ]);
     return { address, name, displayName, avatar };
   } catch (error: any) {

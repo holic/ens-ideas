@@ -1,8 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress, isAddress } from "@ethersproject/address";
-import url from "url";
 
 const provider = new StaticJsonRpcProvider(process.env.ETHEREUM_RPC_URL);
 
@@ -19,7 +17,7 @@ const resolve = (from: string, to: string) => {
   return resolvedUrl.toString();
 };
 
-type Data = {
+type ResponseData = {
   address: string | null;
   name: string | null;
   displayName: string;
@@ -28,9 +26,8 @@ type Data = {
 };
 
 const resolveAddress = async (
-  lowercaseAddress: string,
-  res: NextApiResponse<Data>
-) => {
+  lowercaseAddress: string
+): Promise<ResponseData> => {
   const address = getAddress(lowercaseAddress);
   let displayName = address.replace(
     /^(0x[0-9A-F]{3})[0-9A-F]+([0-9A-F]{4})$/i,
@@ -42,55 +39,41 @@ const resolveAddress = async (
     if (name) {
       displayName = name;
     }
-
     const avatar = name ? await provider.getAvatar(name) : null;
-
-    res
-      .status(200)
-      .setHeader(
-        "CDN-Cache-Control",
-        `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
-      )
-      .json({ address, name, displayName, avatar });
+    return { address, name, displayName, avatar };
   } catch (error: any) {
-    res.status(500).json({
+    return {
       address,
       name: null,
       displayName,
       avatar: null,
       error: error.message,
-    });
+    };
   }
 };
 
-const resolveName = async (name: string, res: NextApiResponse<Data>) => {
+const resolveName = async (name: string): Promise<ResponseData> => {
   const displayName = name;
   try {
     const [address, avatar] = await Promise.all([
       provider.resolveName(name),
       provider.getAvatar(name),
     ]);
-    res
-      .status(200)
-      .setHeader(
-        "CDN-Cache-Control",
-        `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
-      )
-      .json({ address, name, displayName, avatar });
+    return { address, name, displayName, avatar };
   } catch (error: any) {
-    res.status(500).json({
+    return {
       address: null,
       name,
       displayName,
       avatar: null,
       error: error.message,
-    });
+    };
   }
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<ResponseData>
 ) {
   const inputAddress = firstParam(req.query.address);
   const lowercaseAddress = inputAddress.toLowerCase();
@@ -99,7 +82,19 @@ export default async function handler(
     return res.redirect(307, resolve(req.url!, lowercaseAddress));
   }
 
-  return isAddress(lowercaseAddress)
-    ? resolveAddress(lowercaseAddress, res)
-    : resolveName(lowercaseAddress, res);
+  const data = isAddress(lowercaseAddress)
+    ? await resolveAddress(lowercaseAddress)
+    : await resolveName(lowercaseAddress);
+
+  if (data.error) {
+    return res.status(500).json(data);
+  }
+
+  return res
+    .status(200)
+    .setHeader(
+      "CDN-Cache-Control",
+      `s-maxage=${60 * 60 * 24}, stale-while-revalidate`
+    )
+    .json(data);
 }

@@ -1,8 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
-import { getAddress, isAddress } from "@ethersproject/address";
+import { getAddress, isAddress, createPublicClient, http } from "viem";
+import { mainnet } from "viem/chains";
+import { normalize } from "viem/ens";
 
 const provider = new StaticJsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(process.env.ETHEREUM_RPC_URL),
+});
 
 const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;
@@ -25,6 +31,33 @@ type ResponseData = {
   error?: string;
 };
 
+const getEnsName = async ({
+  address,
+}: {
+  address: string;
+}): Promise<string | null> => {
+  // return publicClient.getEnsName({ address });
+  return provider.lookupAddress(address);
+};
+
+const getEnsAddress = async ({
+  name,
+}: {
+  name: string;
+}): Promise<string | null> => {
+  // return publicClient.getEnsAddress({ name: normalize(name) });
+  return provider.resolveName(name);
+};
+
+const getEnsAvatar = async ({
+  name,
+}: {
+  name: string;
+}): Promise<string | null> => {
+  // return publicClient.getEnsAvatar({ name: normalize(name) })
+  return provider.getAvatar(name);
+};
+
 const resolveAddress = async (
   lowercaseAddress: string
 ): Promise<ResponseData> => {
@@ -35,11 +68,11 @@ const resolveAddress = async (
   );
 
   try {
-    const name = await provider.lookupAddress(address);
+    const name = await getEnsName({ address });
     if (name) {
       displayName = name;
     }
-    const avatar = name ? await provider.getAvatar(name) : null;
+    const avatar = name ? await getEnsAvatar({ name }) : null;
     return { address, name, displayName, avatar };
   } catch (error: any) {
     return {
@@ -56,8 +89,8 @@ const resolveName = async (name: string): Promise<ResponseData> => {
   const displayName = name;
   try {
     const [address, avatar] = await Promise.all([
-      provider.resolveName(name),
-      provider.getAvatar(name),
+      getEnsAddress({ name }),
+      getEnsAvatar({ name }),
     ]);
     return { address, name, displayName, avatar };
   } catch (error: any) {

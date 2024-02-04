@@ -12,13 +12,19 @@ const firstParam = (param: string | string[]) => {
   return Array.isArray(param) ? param[0] : param;
 };
 
-const resolve = (from: string, to: string) => {
+const resolveUrl = (from: string, to: string) => {
   const resolvedUrl = new URL(to, new URL(from, "resolve://"));
   if (resolvedUrl.protocol === "resolve:") {
     const { pathname, search, hash } = resolvedUrl;
     return `${pathname}${search}${hash}`;
   }
   return resolvedUrl.toString();
+};
+
+const getAvatar = (name: string) => {
+  return `https://metadata.ens.domains/mainnet/avatar/${encodeURIComponent(
+    normalize(name)
+  )}`;
 };
 
 type ResponseData = {
@@ -43,9 +49,7 @@ const resolveAddress = async (
     if (name) {
       displayName = name;
     }
-    const avatar = name
-      ? await publicClient.getEnsAvatar({ name: normalize(name) })
-      : null;
+    const avatar = name ? getAvatar(name) : null;
     return { address, name, displayName, avatar };
   } catch (error: any) {
     return {
@@ -60,18 +64,16 @@ const resolveAddress = async (
 
 const resolveName = async (name: string): Promise<ResponseData> => {
   const displayName = name;
+  const avatar = getAvatar(name);
   try {
-    const [address, avatar] = await Promise.all([
-      publicClient.getEnsAddress({ name: normalize(name) }),
-      publicClient.getEnsAvatar({ name: normalize(name) }),
-    ]);
+    const address = await publicClient.getEnsAddress({ name: normalize(name) });
     return { address, name, displayName, avatar };
   } catch (error: any) {
     return {
       address: null,
       name,
       displayName,
-      avatar: null,
+      avatar,
       error: error.message,
     };
   }
@@ -85,7 +87,7 @@ export default async function handler(
   const lowercaseAddress = inputAddress.toLowerCase();
 
   if (inputAddress !== lowercaseAddress) {
-    return res.redirect(307, resolve(req.url!, lowercaseAddress));
+    return res.redirect(307, resolveUrl(req.url!, lowercaseAddress));
   }
 
   const data = isAddress(lowercaseAddress)
